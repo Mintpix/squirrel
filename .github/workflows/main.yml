@@ -1,0 +1,46 @@
+name: Github-Pages
+
+on:
+  push:
+    branches:
+      - master
+      - fix_switch
+    paths-ignore:
+      - README.md
+  watch:
+    types: [started]
+
+jobs:
+  deploy:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout resources
+        uses: actions/checkout@v2
+        with:
+          ref: fix_switch
+          submodules: true
+
+      # - name: Start SSH via tmate
+      #   uses: P3TERX/ssh2actions@main
+
+      - name: build
+        run: |
+          git submodule update --init --recursive --remote
+          # git apply --directory librime 0001-delete-auto-generated-delimiter.patch
+
+          bash librime/install-plugins.sh rime/librime-sample
+          bash ./travis-install.sh
+          export BUILD_UNIVERSAL=1
+          make -C librime xcode/thirdparty/boost
+          export BOOST_ROOT="$(pwd)/librime/thirdparty/src/boost_1_75_0"
+          make deps
+          make
+
+          zip -r Squirrel.zip build/Release/Squirrel.app
+
+      - name: upload
+        uses: actions/upload-artifact@master
+        if: always()
+        with:
+          name: Squirrel
+          path: Squirrel.zip

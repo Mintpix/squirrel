@@ -1,0 +1,25 @@
+From e505007e694c00b3f08c721947f88e8643d2ba42 Mon Sep 17 00:00:00 2001
+From: Mintpix <mp@dee.ee>
+Date: Mon, 25 Jan 2021 15:42:53 +0000
+Subject: [PATCH] delete auto-generated delimiter
+
+---
+ src/rime/gear/translator_commons.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/rime/gear/translator_commons.cc b/src/rime/gear/translator_commons.cc
+index ba3635c..e12faca 100644
+--- a/src/rime/gear/translator_commons.cc
++++ b/src/rime/gear/translator_commons.cc
+@@ -134,7 +134,7 @@ TranslatorOptions::TranslatorOptions(const Ticket& ticket) {
+             ticket.name_space + "/disable_user_dict_for_patterns"));
+   }
+   if (delimiters_.empty()) {
+-    delimiters_ = " ";
++    delimiters_ = "";
+   }
+ }
+ 
+-- 
+2.30.0
+
